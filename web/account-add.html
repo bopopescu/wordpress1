@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>wordpress管理</title>
+<script type="text/javascript" src="/eel.js"></script>
+<link href="css/reset.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+
+<style type="text/css">
+	article{
+		text-align: left;
+	}
+</style>
+
+<body>
+    <header>
+        <h1><a href="index.html">wordpress管理</a></h1>
+    </header>
+    <nav id="grobal-nav">
+        <ul>
+            <li><a href="index.html">TOP</a></li>
+            <li><a href="account-add.html">アカウント追加</a></li>
+        </ul>
+    </nav>
+    <main>
+
+        <article>
+            <h2>ブログアカウント追加</h2>
+            <div class="search">
+                <div class="container mbt20">
+                    <div class="item">
+                        <span>ブログ名称</span>
+                        <input id="form1" type="text">
+                    </div>
+
+                    <div class="item">
+                        <span>ログインURL</span>    
+                        <input class="url" id="form2" type="text">
+                    </div>
+
+                    <div class="item">
+                        <span>ログインID</span>    
+                        <input id="form4" type="text">
+                    </div>
+                    <div class="item">
+                        <span>ログインPw</span>    
+                        <input id="form5" type="text">
+                    </div>
+
+                </div>
+
+                <div class="mbt20" id="error">
+
+                </div>
+
+                <div class="container mbt20">
+                    <div class="item">
+                        <button onclick="bt_add_account()">登録</button>
+                    </div>
+                </div>
+            </div>
+
+        </article>
+
+        <article>
+            <h2>アカウント管理</h2>
+
+            <table class="type01" id="search-result-list">
+                <tr>
+                    <th>ブログ名</th>
+                    <th class="time">ID</th>
+                    <th>loginID</th>
+                    <th>Pw</th>
+                    <th>loginURL</th>
+                    <th>ログイン</th>
+                    <th>アクション</th>
+                </tr>
+
+            </table>
+
+        </article>
+
+    </main>
+
+    <footer id="footer">
+    	<small>Copyright&copy;.</small>
+    </footer>
+</body>
+</html>
+
+<script type="text/javascript">
+
+    delete_rows();  
+    show_list();
+
+    async function show_list(){
+        data = await eel.bt_search_post_list()();
+    }
+
+    eel.expose(add_record);
+    function add_record(idnum, blog_name, login_id, login_pw, login_url){
+
+        tbl = document.getElementById("search-result-list");
+        r = tbl.insertRow(-1);
+        cell1 = r.insertCell(0);
+        cell2 = r.insertCell(1);
+        cell3 = r.insertCell(2);
+        cell4 = r.insertCell(3);
+        cell5 = r.insertCell(4);
+        cell6 = r.insertCell(5);
+        cell7 = r.insertCell(6);
+        cell1.innerHTML = blog_name;
+        cell2.innerHTML = idnum;
+        cell3.innerHTML = login_id;
+        cell4.innerHTML = login_pw;
+        cell5.innerHTML = login_url;
+        cell6.innerHTML = '<button onclick="bt_login(' + idnum + ')">ログイン</button>';
+        cell7.innerHTML = '<button onclick="bt_delete(' + idnum + ')">削除</button>';
+
+    }
+
+    eel.expose(delete_rows);
+    function delete_rows(){
+        tbl = document.getElementById("search-result-list");
+        rowLen = tbl.rows.length;
+        for (var i = rowLen-1; i > 0; i--) {
+            tbl.deleteRow(i);
+        }
+    }
+
+    function bt_login(id){
+        eel.bt_login(id);
+    }
+    function bt_delete(id){
+        if(confirm("このレコードを削除します。本当によろしいですか？")){
+            eel.bt_delete(id);
+        }
+        
+    }
+
+    function bt_add_account(){
+
+        error = {};
+        error_area = document.getElementById("error");
+        error_area.innerHTML="";
+
+        list = {};
+        blog_name = document.getElementById("form1").value;//ブログ名称
+        login_url = document.getElementById("form2").value;//ログインURL
+        login_id = document.getElementById("form4").value;//ログインID
+        login_pw = document.getElementById("form5").value;//ログインPw
+
+        list['blog_name'] = blog_name;
+        list['login_url'] = login_url;
+        list['login_id'] = login_id;
+        list['login_pw'] = login_pw;
+
+        for (key in list){
+            if(!list[key]){
+                error[key] = key + "は必須です";
+            }
+        }
+
+
+        if(isEmpty(error)){
+            
+            if(window.confirm("この内容で登録します.よろしいですか？")){
+                //eel function
+                eel.add_account(list['blog_name'], list['login_url'], list['login_id'], list['login_pw']);
+                console.log("show_list")
+                show_list();
+            }
+
+        }else{
+
+            for(key in error){
+                p = document.createElement("p");
+                p.classList.add("error-msg")
+                p.innerHTML = error[key];
+                error_area.appendChild(p);
+            }
+
+        }
+
+    }
+
+    function isEmpty(obj){
+        for(key in obj){
+            return false;
+        }
+        return true;
+    }
+
+</script>

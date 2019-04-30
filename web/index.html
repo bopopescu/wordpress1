@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>wordpress管理</title>
+<script type="text/javascript" src="/eel.js"></script>
+<link href="css/reset.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+
+<style type="text/css">
+	article{
+		text-align: left;
+	}
+</style>
+
+<body>
+    <header>
+        <h1><a href="index.html">wordpress管理</a></h1>
+    </header>
+    <nav id="grobal-nav">
+        <ul>
+            <li><a href="index.html">TOP</a></li>
+            <li><a href="account-add.html">アカウント追加</a></li>
+        </ul>
+    </nav>
+    <main>
+    	
+        <article>
+            <h2>Flow</h2>
+        	<ul>
+                <li>1.申込情報を元にどんなリストを作成するかを考える
+                <li>2.リスト作成
+                <li>3.アクションスケジュール設定
+                <li>4.実行
+            </ul>
+        </article>
+
+        <article>
+            <h2>Summery</h2>
+
+            <div class="container mbt20">
+                <div class="item">
+                    <button onclick="link1_click()">本申込アカウント 12件</button>
+                </div>
+                <div class="item">
+                    <button>仮申込アカウント 20件</button>
+                </div>
+
+                <div class="item">
+                    <button>本日アクション 10件</button>
+                </div>
+
+                <div class="item">
+                    <button>登録ポスト数 501211件</button>
+                </div>
+
+                <div class="item">
+                    <button>登録ユーザー数 501211件</button>
+                </div>
+            </div>
+
+        </article>
+
+        <article>
+            <div id="target"></div>
+        </article>
+
+    </main>
+
+    <footer id="footer">
+    	<small>Copyright&copy;.</small>
+    </footer>
+</body>
+</html>
+
+<script type="text/javascript">
+    
+    function link1_click(){
+        eel.link1_click();
+    }
+
+
+</script>
